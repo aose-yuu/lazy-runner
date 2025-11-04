@@ -40,3 +40,7 @@ lr
 
 - A consola-powered select prompt lists all `options[].name`.
 - Choose an entry interactively; lazy-runner runs the associated `command`.
+
+## License
+
+MIT
