@@ -1,7 +1,7 @@
 import type { ChangelogConfig } from 'changelogen';
 
 export default {
-  repo: 'github:aose-yuu/lazy-picker',
+  repo: 'github:aose-yuu/lazy-runner',
   output: 'CHANGELOG.md',
   hideAuthorEmail: true,
   types: {
