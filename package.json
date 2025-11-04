@@ -1,0 +1,32 @@
+{
+  "name": "lazy-picker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "unbuild",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome lint src test",
+    "format": "biome format --write src test",
+    "check": "biome check src test",
+    "changelog": "changelogen",
+    "test": "pnpm run check && pnpm run typecheck"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.15.1",
+  "dependencies": {
+    "cac": "^6.7.14",
+    "consola": "^3.4.2",
+    "pkg-types": "^2.3.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.3",
+    "@types/node": "^24.10.0",
+    "changelogen": "^0.6.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "unbuild": "^3.6.1"
+  }
+}
