@@ -26,7 +26,12 @@
     "vitest": "vitest run",
     "test": "pnpm run check && pnpm run typecheck && pnpm run vitest"
   },
-  "keywords": [],
+  "keywords": [
+    "cli",
+    "command-runner",
+    "interactive",
+    "command-launcher"
+  ],
   "author": "",
   "license": "MIT",
   "packageManager": "pnpm@10.15.1",
