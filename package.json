@@ -1,7 +1,7 @@
 {
   "name": "lazy-picker",
   "version": "1.0.0",
-  "description": "",
+  "description": "Interactive CLI to select and run predefined commands",
   "main": "index.js",
   "scripts": {
     "build": "unbuild",
