@@ -14,10 +14,5 @@ export default {
     build: { title: 'Build', semver: 'patch' },
     ci: { title: 'CI', semver: 'patch' },
     test: { title: 'Tests', semver: 'patch' }
-  },
-  scopeMap: {
-    cli: 'CLI',
-    worker: 'Worker',
-    pid: 'PID Store'
   }
 } satisfies Partial<ChangelogConfig>;
