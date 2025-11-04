@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v1.0.1
+
+[compare changes](https://github.com/aose-yuu/lazy-runner/compare/v1.0.0...v1.0.1)
+
+### Chores
+
+- Drop unused scope map ([c06e421](https://github.com/aose-yuu/lazy-runner/commit/c06e421))
+
+### ❤️ Contributors
+
+- Aose-yuu
+
 ## v1.0.0
 
 

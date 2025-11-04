@@ -1,6 +1,6 @@
 {
   "name": "lazy-runner",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Interactive CLI to select and run predefined commands",
   "main": "./dist/cli.cjs",
   "module": "./dist/cli.mjs",
