@@ -18,13 +18,20 @@ export async function readPackageJSON() {
   return { name, version };
 }
 
-export type RunnerOption = {
+export type RunnerCommandOption = {
   name: string;
   command: string;
 };
 
+export type RunnerGroupOption = {
+  name: string;
+  options: RunnerOption[];
+};
+
+export type RunnerOption = RunnerCommandOption | RunnerGroupOption;
+
 type SettingsFile = {
-  options?: RunnerOption[];
+  options?: unknown;
   hideOutputMessages?: boolean;
 };
 
@@ -51,24 +58,20 @@ export function parseSettings(raw: string): RunnerSettings {
   }
 
   const normalized = parsed.options
-    .filter(
-      (option): option is RunnerOption =>
-        typeof option?.name === 'string' &&
-        option.name.trim().length > 0 &&
-        typeof option.command === 'string' &&
-        option.command.trim().length > 0,
-    )
-    .map((option) => ({
-      name: option.name.trim(),
-      command: option.command.trim(),
-    }));
+    .map(normalizeOption)
+    .filter((result): result is NormalizedOptionResult => result !== null);
 
-  if (normalized.length === 0) {
-    throw new ConfigError('No valid options found. Provide name and command strings.');
+  const options = normalized.map((entry) => entry.option);
+  const commandCount = normalized.reduce((sum, entry) => sum + entry.commandCount, 0);
+
+  if (options.length === 0 || commandCount === 0) {
+    throw new ConfigError(
+      'No valid commands found. Each option needs a name and either a command or nested options containing commands.',
+    );
   }
 
   return {
-    options: normalized,
+    options,
     hideOutputMessages: parsed.hideOutputMessages ?? false,
   };
 }
@@ -88,4 +91,68 @@ export async function readSettings(options: ReadSettingsOptions = {}): Promise<R
   }
 
   return parseSettings(raw);
+}
+
+type NormalizedOptionResult = {
+  option: RunnerOption;
+  commandCount: number;
+};
+
+function normalizeOption(option: unknown): NormalizedOptionResult | null {
+  if (!isNonNullObject(option)) {
+    return null;
+  }
+
+  const rawName = option.name;
+  const rawCommand = option.command;
+  const rawOptions = option.options;
+
+  if (typeof rawName !== 'string') {
+    return null;
+  }
+
+  const name = rawName.trim();
+  const hasCommand = typeof rawCommand === 'string' && rawCommand.trim().length > 0;
+  const hasOptions = Array.isArray(rawOptions);
+
+  if (name.length === 0 || (hasCommand && hasOptions)) {
+    return null;
+  }
+
+  if (hasCommand) {
+    return {
+      option: { name, command: rawCommand.trim() },
+      commandCount: 1,
+    };
+  }
+
+  if (!hasOptions) {
+    return null;
+  }
+
+  const normalizedChildren = rawOptions
+    .map(normalizeOption)
+    .filter((child): child is NormalizedOptionResult => child !== null);
+
+  const commandCount = normalizedChildren.reduce((sum, child) => sum + child.commandCount, 0);
+
+  if (normalizedChildren.length === 0 || commandCount === 0) {
+    return null;
+  }
+
+  return {
+    option: {
+      name,
+      options: normalizedChildren.map((child) => child.option),
+    },
+    commandCount,
+  };
+}
+
+function isNonNullObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+export function isCommandOption(option: RunnerOption): option is RunnerCommandOption {
+  return 'command' in option;
 }

@@ -34,6 +34,33 @@ describe('parseSettings', () => {
     expect(result.hideOutputMessages).toBe(true);
   });
 
+  it('normalizes nested options and trims names/commands', () => {
+    const raw = JSON.stringify({
+      options: [
+        {
+          name: '  AI ',
+          options: [
+            { name: ' claude code ', command: ' claude ' },
+            { name: ' ', command: 'skip' },
+          ],
+        },
+        { name: ' solo ', command: ' run ' },
+      ],
+      hideOutputMessages: true,
+    });
+
+    const result = parseSettings(raw);
+
+    expect(result.options).toEqual([
+      {
+        name: 'AI',
+        options: [{ name: 'claude code', command: 'claude' }],
+      },
+      { name: 'solo', command: 'run' },
+    ]);
+    expect(result.hideOutputMessages).toBe(true);
+  });
+
   it('fails when options array is missing', () => {
     const raw = JSON.stringify({});
     expect(() => parseSettings(raw)).toThrowError(ConfigError);
@@ -60,6 +87,14 @@ describe('parseSettings', () => {
 
     expect(result.options).toEqual([{ name: 'gamma', command: 'uptick' }]);
     expect(result.hideOutputMessages).toBe(false);
+  });
+
+  it('fails when nested groups have no runnable commands', () => {
+    const raw = JSON.stringify({
+      options: [{ name: 'group', options: [{ name: 'empty', options: [] }] }],
+    });
+
+    expect(() => parseSettings(raw)).toThrowError(ConfigError);
   });
 
   it('fails when JSON cannot be parsed', () => {
