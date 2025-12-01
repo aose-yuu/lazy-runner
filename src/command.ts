@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
 import { assertCommandSucceeded } from './errors.js';
-import type { RunnerOption } from './settings.js';
+import type { RunnerCommandOption } from './settings.js';
 
 export type CommandResult = {
   code: number;
@@ -22,11 +22,11 @@ async function spawnCommandProcess(command: string): Promise<CommandResult> {
 }
 
 export type CommandHooks = {
-  onBeforeStart?: (option: RunnerOption) => void;
-  onAfterSuccess?: (option: RunnerOption) => void;
+  onBeforeStart?: (option: RunnerCommandOption) => void;
+  onAfterSuccess?: (option: RunnerCommandOption) => void;
 };
 
-export async function runCommand(option: RunnerOption, hooks: CommandHooks): Promise<void> {
+export async function runCommand(option: RunnerCommandOption, hooks: CommandHooks): Promise<void> {
   hooks.onBeforeStart?.(option);
 
   const result = await spawnCommandProcess(option.command);
