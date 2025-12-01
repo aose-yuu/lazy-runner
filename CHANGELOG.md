@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v1.1.0
+
+[compare changes](https://github.com/aose-yuu/lazy-runner/compare/v1.0.1...v1.1.0)
+
+### Features
+
+- Add nested command groups with recursive prompt ([c25d264](https://github.com/aose-yuu/lazy-runner/commit/c25d264))
+
+### Documentation
+
+- Document nested command configuration example ([b1392b4](https://github.com/aose-yuu/lazy-runner/commit/b1392b4))
+
+### ❤️ Contributors
+
+- Aose-yuu
+
 ## v1.0.1
 
 [compare changes](https://github.com/aose-yuu/lazy-runner/compare/v1.0.0...v1.0.1)
